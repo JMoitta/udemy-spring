@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -9,34 +10,38 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.entity.Role;
+import com.example.demo.entity.User;
 import com.example.demo.repository.RoleRepository;
+import com.example.demo.repository.UserRepository;
 
 @Component
 public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
-	
+
 	@Autowired
 	private RoleRepository roleRepository;
 	
+	@Autowired
+	private UserRepository userRepository;
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent arg0) {
+		Role role = new Role("Admin", StatusRole.ATIVO);
 		
-		for(int i = 0; i < 1000; i++) {
-			this.saveRole("Admin", StatusRole.ATIVO);
-		}
-		for(int i = 0; i < 1000; i++) {
-			this.saveRole("Admin", StatusRole.INATIVO);
-		}
-		PageRequest page = PageRequest.of(10, 10);
-		Page<Role> roles = this.roleRepository.findAll(page);
+//		this.roleRepository.save(role);
 		
-		for(Role role : roles) {
-			System.out.println(role.getName());
+		User user = new User();
+		
+		user.setName("Nataniel");
+		user.setEmail("nataniel.paiva@gmail.com");
+		user.setRole(role);
+		
+		this.userRepository.save(user);
+		
+		List<User> userR = this.userRepository.findAll();
+		
+		for(User user2 : userR) {
+			System.out.println(user2.getRole());
 		}
 	}
 
-	public void saveRole(String name, StatusRole status) {
-		Role role = new  Role(name, status);
-		this.roleRepository.save(role);
-	}
 }
