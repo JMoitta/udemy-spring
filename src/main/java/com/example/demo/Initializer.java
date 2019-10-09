@@ -50,17 +50,21 @@ public class Initializer implements ApplicationListener<ContextRefreshedEvent> {
 		user.setRoles(Arrays.asList(role, role3));
 
 		this.userRepository.save(user);
-
-		List<User> userR = this.userRepository.findAll();
-
-		for (User user2 : userR) {
-			for (Role role2 : user2.getRoles()) {
-				System.out.println(role2.getName());
-				for(Functionality f : role2.getFunctionalities()) {
-					System.out.println(f.getName());
-				}
-			}
+		
+		User user2 = new User();
+		
+		user2.setName("João");
+		user2.setEmail("joao@gmail.com");
+//		user2.setRoles(Arrays.asList(role, role3));
+		
+		userRepository.save(user2);
+		
+		List<User> listUsers = userRepository.findByName("o");
+		
+		for(User user3 : listUsers) {
+			System.out.println(user3.getName());
 		}
+
 
 	}
 
